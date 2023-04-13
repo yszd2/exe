@@ -1,0 +1,67 @@
+import tkinter as tk
+from tkinter import messagebox
+import os
+import json
+from datetime import datetime, timedelta
+import webbrowser
+
+
+# 登录注册系统
+
+
+class LoginRegisterSystem:
+    def __init__(self, root):
+        self.root = root
+        self.root.title('登录注册系统')
+        self.root.geometry('400x300')
+
+        # 用户信息储存文件路径
+        self.user_data_file = 'user_data.json'
+
+        # 用户数据初始化
+        self.user_data = {}
+        if os.path.isfile(self.user_data_file):
+            with open(self.user_data_file, 'r') as f:
+                self.user_data = json.load(f)
+
+        # 用户名变量
+        self.username_var = tk.StringVar()
+        # 密码变量
+        self.password_var = tk.StringVar()
+
+        # 登录页面
+        self.login_frame = tk.Frame(self.root)
+        self.login_frame.pack(pady=20)
+        tk.Label(self.login_frame, text='登录', font=('Arial', 18)).grid(row=0, column=0, columnspan=2, pady=10)
+        tk.Label(self.login_frame, text='用户名：').grid(row=1, column=0)
+        tk.Entry(self.login_frame, textvariable=self.username_var).grid(row=1, column=1)
+        tk.Label(self.login_frame, text='密码：').grid(row=2, column=0)
+        tk.Entry(self.login_frame, textvariable=self.password_var, show='*').grid(row=2, column=1)
+        tk.Button(self.login_frame, text='登录', command=self.login).grid(row=3, column=0, pady=10)
+        tk.Button(self.login_frame, text='注册', command=self.register).grid(row=3, column=1, pady=10)
+
+        # 注册页面
+        self.register_frame = tk.Frame(self.root)
+        tk.Label(self.register_frame, text='注册', font=('Arial', 18)).grid(row=0, column=0, columnspan=2, pady=10)
+        tk.Label(self.register_frame, text='用户名：').grid(row=1, column=0)
+        self.register_username_var = tk.StringVar()
+        tk.Entry(self.register_frame, textvariable=self.register_username_var).grid(row=1, column=1)
+        tk.Label(self.register_frame, text='密码：').grid(row=2, column=0)
+        self.register_password_var = tk.StringVar()
+        tk.Entry(self.register_frame, textvariable=self.register_password_var, show='*').grid(row=2, column=1)
+        tk.Label(self.register_frame, text='确认密码：').grid(row=3, column=0)
+        self.register_confirm_password_var = tk.StringVar()
+        tk.Entry(self.register_frame, textvariable=self.register_confirm_password_var, show='*').grid(row=3, column=1)
+        tk.Button(self.register_frame, text='注册', command=self.do_register).grid(row=4, column=0, pady=10)
+        tk.Button(self.register_frame, text='返回登录', command=self.show_login_frame).grid(row=4, column=1, pady=10)
+
+        # 隐藏注册页面
+        self.register_frame.pack_forget()
+
+    def show_login_frame(self):
+        self.login_frame.pack(pady=20)
+        self.register_frame.pack_forget()
+
+    def show_register_frame(self):
+        self.register_frame.pack(pady=20)
+
